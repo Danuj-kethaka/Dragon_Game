@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         energy = maxEnergy;
+        BackgroundController.Instance.UpdateEnergySlider(energy,maxEnergy);
 
     }
 
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
                 energy += energyRegen;
             }
         }
+        BackgroundController.Instance.UpdateEnergySlider(energy,maxEnergy);
     }
 
     private void EnterBoost()

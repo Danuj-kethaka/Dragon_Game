@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "358814195932",
+    "project_id": "dragongame-6f24e",
+    "storage_bucket": "dragongame-6f24e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358814195932:android:8f8057e2d373d1ca705419",
+        "android_client_info": {
+          "package_name": "com.dragongame.mygame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmwYefmHSAPa-LyyIBhO837TnhGdU_ooo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

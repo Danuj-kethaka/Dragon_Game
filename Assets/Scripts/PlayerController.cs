@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float boost =1f;
     private bool boosting = false;
     private float boostPower = 5f;
+    public bool canMove = false;
     [SerializeField]private float energy;
     [SerializeField]private float maxEnergy;
     [SerializeField]private float energyRegen;
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       if(!canMove) return;
+
        float directionX = Input.GetAxisRaw("Horizontal");
        float directionY = Input.GetAxisRaw("Vertical");
        animator.SetFloat("moveX",directionX);
@@ -56,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(!canMove) return;
+        
         rb.linearVelocity = new Vector2(playerDirection.x * moveSpeed,playerDirection.y * moveSpeed);
         if (boosting)
         {

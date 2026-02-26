@@ -54,6 +54,7 @@ public class AuthController : MonoBehaviour
             var result = await auth.SignInWithEmailAndPasswordAsync(email,password);
             loginStatusText.text = "Login Successfully";
             loginPanel.SetActive(false);
+            PlayerController.Instance.canMove = true;
             Debug.Log("User logged in: "+result.User.Email);
         }
         catch(System.Exception e)

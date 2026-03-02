@@ -9,29 +9,32 @@ public class AuthController : MonoBehaviour
     public TMP_InputField loginEmailInput;
     public TMP_InputField loginPasswordInput;
     public TMP_Text loginStatusText;
+    public TMP_Text logoutStatusText;
     
     public TMP_InputField registerEmailInput;
     public TMP_InputField registerPasswordInput;
     public TMP_Text registerstatusText;
+    public TMP_Text userEmailText;
 
     public GameObject loginPanel;
+    public GameObject panelToOpen;
 
     private FirebaseAuth auth;
 
     async void Start()
-{
-    var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+    {
+        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
 
-    if (dependencyStatus == DependencyStatus.Available)
-    {
-        auth = FirebaseAuth.DefaultInstance;
-        Debug.Log("Firebase ready");
+        if (dependencyStatus == DependencyStatus.Available)
+        {
+            auth = FirebaseAuth.DefaultInstance;
+            Debug.Log("Firebase ready");
+        }
+        else
+        {
+            Debug.LogError("Could not resolve dependencies");
+        }
     }
-    else
-    {
-        Debug.LogError("Could not resolve dependencies");
-    }
-}
 
 
     public void OnLoginClicked()
@@ -90,6 +93,20 @@ public class AuthController : MonoBehaviour
         {
             registerstatusText.text = "Registration Failed";
             Debug.LogError(e.Message);
+        }
+    }
+
+    public void SignOutUser()
+    {
+        if(auth!=null)
+        {
+            auth.SignOut();
+            logoutStatusText.text = "User log out Successfully";
+            loginPanel.SetActive(true);
+            panelToOpen.SetActive(false);
+            loginEmailInput.text = "";
+            loginPasswordInput.text = "";
+            PlayerController.Instance.canMove = false;   
         }
     }
 

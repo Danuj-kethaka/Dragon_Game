@@ -3,6 +3,7 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class AuthController : MonoBehaviour
 {
@@ -18,12 +19,13 @@ public class AuthController : MonoBehaviour
 
     public GameObject loginPanel;
     public GameObject panelToOpen;
-
     private FirebaseAuth auth;
+    public Slider AccountSlider;
 
     async void Start()
     {
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+        AccountSlider.interactable = false;
 
         if (dependencyStatus == DependencyStatus.Available)
         {
@@ -55,10 +57,16 @@ public class AuthController : MonoBehaviour
         try
         {
             var result = await auth.SignInWithEmailAndPasswordAsync(email,password);
-            loginStatusText.text = "Login Successfully";
-            loginPanel.SetActive(false);
-            PlayerController.Instance.canMove = true;
-            Debug.Log("User logged in: "+result.User.Email);
+            FirebaseUser user = result.User;
+            await user.ReloadAsync();
+            if(user.IsEmailVerified)
+            {
+               loginStatusText.text = "Login Successfully";
+               loginPanel.SetActive(false);
+               AccountSlider.interactable= true;
+               PlayerController.Instance.canMove = true;
+               Debug.Log("User logged in: "+result.User.Email); 
+            }
         }
         catch(System.Exception e)
         {
@@ -86,6 +94,8 @@ public class AuthController : MonoBehaviour
         try
         {
             var result = await auth.CreateUserWithEmailAndPasswordAsync(email,password);
+            FirebaseUser user = result.User;
+            await user.SendEmailVerificationAsync();
             registerstatusText.text = "User Registered Successfully";
             Debug.Log("User registered: "+result.User.Email);
         }
@@ -104,6 +114,7 @@ public class AuthController : MonoBehaviour
             logoutStatusText.text = "User log out Successfully";
             loginPanel.SetActive(true);
             panelToOpen.SetActive(false);
+            AccountSlider.interactable=false;
             loginEmailInput.text = "";
             loginPasswordInput.text = "";
             PlayerController.Instance.canMove = false;   

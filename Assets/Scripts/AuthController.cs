@@ -96,7 +96,7 @@ public class AuthController : MonoBehaviour
             var result = await auth.CreateUserWithEmailAndPasswordAsync(email,password);
             FirebaseUser user = result.User;
             await user.SendEmailVerificationAsync();
-            registerstatusText.text = "User Registered Successfully";
+            registerstatusText.text = "Account created Successfully.We have sent you a confirmation link to your email.verify your account to continue.";
             Debug.Log("User registered: "+result.User.Email);
         }
         catch(System.Exception e)

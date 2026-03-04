@@ -118,6 +118,14 @@ public class PlayerController : MonoBehaviour
             boost = 0f;
             gameObject.SetActive(false);
             Instantiate(destroyEffect,transform.position, transform.rotation);
+            APIGameManager.Instance.TriggerQuiz();
         }
+    }
+
+    public void RestoreHealth()
+    {
+        health = maxHealth;
+        BackgroundController.Instance.UpdateHealthSlider(health,maxHealth);
+        gameObject.SetActive(true);
     }
 }

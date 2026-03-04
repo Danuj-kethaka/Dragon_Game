@@ -20,12 +20,14 @@ public class SettingsPanel : MonoBehaviour
     public void OpenPanel()
     {
         panelToOpen.SetActive(true);
+        PlayerController.Instance.canMove = false;
         ShowUserInfo();
     }
 
     public void CLosePanel()
     {
         panelToOpen.SetActive(false);
+         PlayerController.Instance.canMove = true;
     }
 
     public void ShowUserInfo()
@@ -34,8 +36,8 @@ public class SettingsPanel : MonoBehaviour
 
         if (user != null)
         {
-            userEmailText.text = "Email : " + user.Email;
-            userPasswordText.text = "password : ***************";
+            userEmailText.text = "email: " + user.Email;
+            userPasswordText.text = "password: ***************";
 
         }
     }

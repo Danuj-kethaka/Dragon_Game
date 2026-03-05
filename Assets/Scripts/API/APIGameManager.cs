@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class APIGameManager : MonoBehaviour
@@ -18,6 +19,14 @@ public class APIGameManager : MonoBehaviour
 
     public void TriggerQuiz()
     {
+        StartCoroutine(delayshowquiz());
+        //QuizManager.Instance.ShowQuiz();
+    }
+
+    IEnumerator delayshowquiz()
+    {
+        yield return new WaitForSeconds(2f);
         QuizManager.Instance.ShowQuiz();
     }
+    
 }

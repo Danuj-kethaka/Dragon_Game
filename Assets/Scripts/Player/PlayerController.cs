@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
      [SerializeField]private float health;
     [SerializeField]private float maxHealth;
     [SerializeField] private GameObject destroyEffect;
+    [SerializeField] private GameObject firePrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float fireCooldown = 0.3f;
+    private float fireTimer;
 
     void Awake()
     {
@@ -51,6 +55,7 @@ public class PlayerController : MonoBehaviour
        animator.SetFloat("moveX",directionX);
        animator.SetFloat("moveY",directionY);
        playerDirection = new Vector2(directionX,directionY).normalized;
+       fireTimer += Time.deltaTime;
 
        if(Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire2"))
         {
@@ -59,6 +64,17 @@ public class PlayerController : MonoBehaviour
         else if(Input.GetKeyUp(KeyCode.Space) || Input.GetButtonUp("Fire2")){
             ExitBoost();
         }
+
+        if(Input.GetKeyDown(KeyCode.F) && fireTimer >= fireCooldown)
+        {
+            shoot();
+            fireTimer = 0f;
+        }
+    }
+
+    private void shoot()
+    {
+        Instantiate(firePrefab, firePoint.position, firePoint.rotation);
     }
 
     void FixedUpdate()

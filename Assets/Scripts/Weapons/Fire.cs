@@ -22,6 +22,7 @@ public class Fire : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
             Instantiate(destroyEffect,transform.position, transform.rotation);
+            GameManager.Instance.addkill();
         }
     }
 }

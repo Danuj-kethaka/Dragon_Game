@@ -5188,6 +5188,7 @@ GameObject:
   - component: {fileID: 1079679946}
   - component: {fileID: 1079679947}
   - component: {fileID: 1079679948}
+  - component: {fileID: 1079679949}
   m_Layer: 0
   m_Name: img1
   m_TagString: Untagged
@@ -5278,6 +5279,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
+--- !u!114 &1079679949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079679945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f671b899bf3de4f9231e49a48446a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  speed: 0
+  damage: 0
 --- !u!1 &1091443993
 GameObject:
   m_ObjectHideFlags: 0
@@ -5552,6 +5568,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1100472004}
   m_CullTransparentMesh: 1
+--- !u!1 &1111952884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1111952885}
+  m_Layer: 6
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1111952885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111952884}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1634647443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1191773444
 GameObject:
   m_ObjectHideFlags: 0
@@ -7841,7 +7888,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1111952885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1634647444
@@ -7914,6 +7962,9 @@ MonoBehaviour:
   health: 0
   maxHealth: 3
   destroyEffect: {fileID: 5521888896754394994, guid: 16ed36adce4dfe048a1b400fd34ddfd5, type: 3}
+  firePrefab: {fileID: 8640220757096680795, guid: 69feeb5cc7fc9e5448e833399a9a0247, type: 3}
+  firePoint: {fileID: 1111952885}
+  fireCooldown: 0.3
 --- !u!58 &1634647447
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class BackgroundController : MonoBehaviour
     [SerializeField]private TMP_Text energyText;
      [SerializeField]private Slider healthSlider;
     [SerializeField]private TMP_Text healthText;
+    [SerializeField] private Slider killSlider;
+    [SerializeField] private TMP_Text killText;
 
     void Awake()
     {
@@ -34,5 +36,12 @@ public class BackgroundController : MonoBehaviour
         healthSlider.maxValue = max;
         healthSlider.value = Mathf.RoundToInt(current);
         healthText.text =  healthSlider.value + "/" + healthSlider.maxValue;
+    }
+
+    public void UpdatekillSlider(int current,int max)
+    {
+        killSlider.maxValue = max;
+        killSlider.value = current;
+        killText.text = current + "/" +max;
     }
 }

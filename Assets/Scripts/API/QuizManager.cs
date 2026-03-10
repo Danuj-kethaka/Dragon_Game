@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine.UI;
+using Firebase.Auth;
+using Firebase.Firestore;
+using System.Collections.Generic;
 
 public class QuizManager : MonoBehaviour
 {
@@ -11,17 +14,32 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private TMPro.TMP_InputField answerInput;
     [SerializeField] private TMPro.TMP_Text resultText;
     [SerializeField] private RawImage puzzleImage;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TMPro.TMP_Text scoreText;
+    [SerializeField] private TMPro.TMP_Text attemptsText;
+    [SerializeField] private GameObject loginPanel;
 
     private string correctAnswer;
+    private int wrongAttempts = 0;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
     
     void Awake()
     {
         Instance = this;
     }
 
+    void Start()
+    {
+        auth = FirebaseAuth.DefaultInstance;
+        db = FirebaseFirestore.DefaultInstance;
+    }
+
     public void ShowQuiz()
     {
         quizpanel.SetActive(true);
+        wrongAttempts = 0;
+        attemptsText.text = "Attempts Left: 2";
         StartCoroutine(GetQuizQuestion());
         puzzleImage.texture = null;
     }
@@ -69,21 +87,93 @@ public class QuizManager : MonoBehaviour
         if(answerInput.text == correctAnswer)
         {
             resultText.text = "correct...health restored";
+            wrongAttempts = 0;
             PlayerController.Instance.RestoreHealth();
             quizpanel.SetActive(false);
         }
 
         else
         {
-            StartCoroutine(ShowWrongAnswer());
+            wrongAttempts++;
+            int remainingAttempts = 2-wrongAttempts;
+            attemptsText.text = "Attempts Left: "+remainingAttempts;
+            if(wrongAttempts>=2)
+            {
+                GameOver();
+            }
+            else
+            {
+                StartCoroutine(ShowWrongAnswer());
+            }
         }
     }
+
+    public void GameOver()
+    {
+        quizpanel.SetActive(false);
+        int score = GameManager.Instance.killCount;
+        gameOverPanel.SetActive(true);
+        scoreText.text = "Your Score : " + score;
+        SaveScore(score);
+    }
+
+    async void SaveScore(int newScore)
+    {
+        FirebaseUser user = auth.CurrentUser;
+        if(user != null)
+        {
+            DocumentReference docRef = db.Collection("users").Document(user.UserId);
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+            int oldScore = 0;
+
+            if(snapshot.Exists && snapshot.ContainsField("score"))
+            {
+                oldScore = snapshot.GetValue<int>("score");
+            } 
+
+            if(newScore>oldScore)
+            {
+                 Dictionary<string,object> updates = new Dictionary<string, object>()
+                {
+                    {"score", newScore}
+                };
+                await docRef.UpdateAsync(updates);
+                Debug.Log("New high Score saved in the database");
+            }
+            else
+            {
+                Debug.Log("Score not higher than old score");
+            }
+        }
+    }
+
     IEnumerator ShowWrongAnswer()
     {
         resultText.text = "Wrong answer!";
         yield return new WaitForSeconds(2f);
         resultText.text = "";
         answerInput.text = "";
+    }
+
+    public void restart()
+    {
+        gameOverPanel.SetActive(false);
+        wrongAttempts = 0;
+        PlayerController.Instance.RestoreHealth();
+        GameManager.Instance.killCount = 0;
+        BackgroundController.Instance.UpdatekillSlider(0, GameManager.Instance.maxKills);
+    }
+
+    public void Home()
+    {
+        auth.SignOut();
+        gameOverPanel.SetActive(false);
+        loginPanel.SetActive(true);
+        PlayerController.Instance.canMove = false;
+        PlayerController.Instance.RestoreHealth();
+        GameManager.Instance.killCount = 0;
+        BackgroundController.Instance.UpdatekillSlider(0,GameManager.Instance.maxKills);
     }
 }
 

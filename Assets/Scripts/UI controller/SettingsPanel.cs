@@ -27,7 +27,7 @@ public class SettingsPanel : MonoBehaviour
     public void CLosePanel()
     {
         panelToOpen.SetActive(false);
-         PlayerController.Instance.canMove = true;
+        PlayerController.Instance.canMove = true;
     }
 
     public void ShowUserInfo()

@@ -17,6 +17,7 @@ public class AuthController : MonoBehaviour
     
     public TMP_InputField registerEmailInput;
     public TMP_InputField registerPasswordInput;
+    public TMP_InputField registerUserNameInput;
     public TMP_Text registerstatusText;
     public TMP_Text userEmailText;
 
@@ -110,13 +111,14 @@ public class AuthController : MonoBehaviour
     {
         string email = registerEmailInput.text;
         string password = registerPasswordInput.text;
+        string username = registerUserNameInput.text;
 
-        RegisterUser(email,password);
+        RegisterUser(email,password,username);
     }
 
-    async void RegisterUser(string email,string password)
+    async void RegisterUser(string email,string password, string username)
     {
-        if(email == "" || password == "")
+        if(email == "" || password == "" || username=="")
         {
             registerstatusText.text = "Register fields cannot be empty";
             return;
@@ -130,6 +132,7 @@ public class AuthController : MonoBehaviour
             DocumentReference docRef = db.Collection("users").Document(user.UserId);
             Dictionary<string,object> data = new Dictionary<string, object>()
             {
+                {"username",username},
                 {"email",email},
                 {"role","player"},
                 {"score",0}

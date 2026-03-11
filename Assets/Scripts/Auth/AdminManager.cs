@@ -26,14 +26,25 @@ public class AdminManager : MonoBehaviour
         QuerySnapshot snapshot = await db.Collection("users").GetSnapshotAsync();
         foreach(DocumentSnapshot doc in snapshot.Documents)
         {
-            string email = doc.GetValue<string>("email");
+            string email = "";
+            string username = "empty";
             int score = 0;
+
+            if(doc.ContainsField("email"))
+            {
+                email = doc.GetValue<string>("email");
+            }
+            if(doc.ContainsField("username"))
+            {
+                username = doc.GetValue<string>("username");
+            }
             if(doc.ContainsField("score"))
             {
                 score = doc.GetValue<int>("score");
             }
+
             GameObject textObj = Instantiate(userTextPrefab,content);
-            textObj.GetComponent<TMP_Text>().text = email+" | score  : "+  score;
+            textObj.GetComponent<TMP_Text>().text = username + " | " + email + " | " + "Score " + score;
         }
     }
 

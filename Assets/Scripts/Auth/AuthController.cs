@@ -8,6 +8,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 
+// Handle user authentication using Firebase (virtual identity management)
+// Includes login, registration and role-based acces 
+
 public class AuthController : MonoBehaviour
 {
     public TMP_InputField loginEmailInput;
@@ -30,6 +33,7 @@ public class AuthController : MonoBehaviour
 
     async void Start()
     {
+        // Check Firebase dependencies before using authentication
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         AccountSlider.interactable = false;
 
@@ -51,6 +55,7 @@ public class AuthController : MonoBehaviour
     {
         string email = loginEmailInput.text;
         string password = loginPasswordInput.text;
+        // Authenticate user using email and password (Firebase Auth)
         LoginUser(email,password);
     }
 
@@ -66,6 +71,7 @@ public class AuthController : MonoBehaviour
         {
             var result = await auth.SignInWithEmailAndPasswordAsync(email,password);
             FirebaseUser user = result.User;
+            // Ensure user has verified email before allowing access
             await user.ReloadAsync();
             if(user.IsEmailVerified)
             {
@@ -75,6 +81,7 @@ public class AuthController : MonoBehaviour
                AccountSlider.interactable= true;
                PlayerController.Instance.canMove = true;
                Debug.Log("User logged in: "+result.User.Email); 
+               // Retrieve user role from Firestore (authorization)
                await CheckUserRole(user.UserId);
             }
         }
@@ -93,6 +100,7 @@ public class AuthController : MonoBehaviour
         if(snapshot.Exists)
         {
             string role = snapshot.GetValue<string>("role");
+            // Retrieve user role from Firestore (authorization)
             if(role == "admin")
             {
                 AdminPanel.SetActive(true);
@@ -130,6 +138,7 @@ public class AuthController : MonoBehaviour
             FirebaseUser user = result.User;
             await user.SendEmailVerificationAsync();
             DocumentReference docRef = db.Collection("users").Document(user.UserId);
+            // Create new user and store additional data in Firestore database
             Dictionary<string,object> data = new Dictionary<string, object>()
             {
                 {"username",username},

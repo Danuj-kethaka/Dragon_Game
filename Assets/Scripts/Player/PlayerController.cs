@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Controls player movement, shooting, boosting, health and energy system
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
        float directionX = Input.GetAxisRaw("Horizontal");
        float directionY = Input.GetAxisRaw("Vertical");
+       // Handle player input (keyboard evenets)
        animator.SetFloat("moveX",directionX);
        animator.SetFloat("moveY",directionY);
        playerDirection = new Vector2(directionX,directionY).normalized;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
 
        if(Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire2"))
         {
+            // Increase speed temporarily using enery (boost option) 
             EnterBoost();
         }
         else if(Input.GetKeyUp(KeyCode.Space) || Input.GetButtonUp("Fire2")){
@@ -117,8 +120,10 @@ public class PlayerController : MonoBehaviour
          boosting = false;
     }
 
+    // Event Driven Programming - This function is triggered automatically when a collision event occurs between the player and another object. 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Detect collision with obstacles
         if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Whale"))
         {
             TakeDamage(1);
@@ -134,6 +139,7 @@ public class PlayerController : MonoBehaviour
             boost = 0f;
             gameObject.SetActive(false);
             Instantiate(destroyEffect,transform.position, transform.rotation);
+            // When health reaches zero, trigger quiz system (event-driven interaction)
             APIGameManager.Instance.TriggerQuiz();
         }
     }

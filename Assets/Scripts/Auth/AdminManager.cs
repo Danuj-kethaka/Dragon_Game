@@ -18,11 +18,13 @@ public class AdminManager : MonoBehaviour
     {
         db = FirebaseFirestore.DefaultInstance;
         auth = FirebaseAuth.DefaultInstance;
+        // Loads all users from Firestore and display them in admin panel
         LoadUsers();
     }
 
     async void LoadUsers()
     {
+        // Fetch all users from database (cloud data retrieval)
         QuerySnapshot snapshot = await db.Collection("users").GetSnapshotAsync();
         foreach(DocumentSnapshot doc in snapshot.Documents)
         {

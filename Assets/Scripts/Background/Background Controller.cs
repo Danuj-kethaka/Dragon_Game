@@ -24,6 +24,7 @@ public class BackgroundController : MonoBehaviour
         }
     }
 
+    // Update UI elements like health, energy and killcount
     public void UpdateEnergySlider(float current,float max)
     {
         energySlider.maxValue = max;

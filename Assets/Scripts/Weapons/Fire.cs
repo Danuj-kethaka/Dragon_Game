@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Handle fire event
 public class Fire : MonoBehaviour
 {
     public float speed = 10f;
@@ -19,6 +20,7 @@ public class Fire : MonoBehaviour
     {
         if(collision.CompareTag("Obstacle") || collision.CompareTag("Whale"))
         {
+            // Destroy enemy and increase score when hit
             Destroy(collision.gameObject);
             Destroy(gameObject);
             Instantiate(destroyEffect,transform.position, transform.rotation);

@@ -36,6 +36,7 @@ public class SettingsPanel : MonoBehaviour
         PlayerController.Instance.canMove = true;
     }
 
+    // Show user information in the account panel
     public async Task ShowUserInfo()
     {
         FirebaseUser user = auth.CurrentUser;

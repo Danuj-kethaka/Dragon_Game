@@ -1,5 +1,4 @@
 using UnityEngine;
-//ghost game
 
 public class ParallaxBackground : MonoBehaviour
 {

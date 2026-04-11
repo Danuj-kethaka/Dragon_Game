@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Animation effect that appear after destroying the objects such as Asteroids and Whales
 public class Boom : MonoBehaviour
 {
     private Animator animator;

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// This class manages triggering the quiz system when player dies
 public class APIGameManager : MonoBehaviour
 {
     public static APIGameManager Instance;
@@ -9,7 +10,8 @@ public class APIGameManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(gameObject);
+            // Singleton pattern to ensure only one instance exists.
+            Destroy(gameObject); 
         }
         else
         {
@@ -19,12 +21,13 @@ public class APIGameManager : MonoBehaviour
 
     public void TriggerQuiz()
     {
+        // Start a delay before showing quiz (event-driven behaviour)
         StartCoroutine(delayshowquiz());
-        //QuizManager.Instance.ShowQuiz();
     }
 
     IEnumerator delayshowquiz()
     {
+        // Wait for 2 seconds before showing quiz UI
         yield return new WaitForSeconds(2f);
         QuizManager.Instance.ShowQuiz();
     }

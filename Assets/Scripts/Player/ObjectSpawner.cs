@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Spawns objects in waves (game progression system)
 public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField] private Transform minPos;
@@ -21,6 +22,7 @@ public class ObjectSpawner : MonoBehaviour
 
     void Update()
     {
+       // Event driven - Spawn objects based on timer (time-based event system)
        waves[waveNumber].spawnTimer += Time.deltaTime * PlayerController.Instance.boost;
         if(waves[waveNumber].spawnTimer >= waves[waveNumber].spawnInterval)
         {

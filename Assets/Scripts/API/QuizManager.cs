@@ -6,6 +6,7 @@ using Firebase.Auth;
 using Firebase.Firestore;
 using System.Collections.Generic;
 
+// Controls the Banana API quiz panel
 public class QuizManager : MonoBehaviour
 {
     public static QuizManager Instance;
@@ -47,6 +48,7 @@ public class QuizManager : MonoBehaviour
     IEnumerator GetQuizQuestion()
     {
         resultText.text = "";
+        // Calling external Banana API to fetch quiz question (interoperability)
         string url = "https://marcconrad.com/uob/banana/api.php";
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -54,9 +56,11 @@ public class QuizManager : MonoBehaviour
         if(request.result == UnityWebRequest.Result.Success)
         {
             string json = request.downloadHandler.text;
+            // Convert JSON response into C# object
             BananaResponse response = JsonUtility.FromJson<BananaResponse>(json);
             questionText.text = "Solve the puzzle to continue the game  !!!!!!";
             correctAnswer = response.solution.ToString();
+            // Load puzzle image from API URL
             StartCoroutine(LoadPuzzleImage(response.question));
         }
 
@@ -67,23 +71,25 @@ public class QuizManager : MonoBehaviour
     }
 
    IEnumerator LoadPuzzleImage(string imageUrl)
-{
-    UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl);
-    yield return request.SendWebRequest();
-
-    if (request.result == UnityWebRequest.Result.Success)
     {
-        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-        puzzleImage.texture = texture;
-    }
-    else
-    {
-        resultText.text = "Image Load Failed";
-    }
-}
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl);
+        yield return request.SendWebRequest();
 
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
+            puzzleImage.texture = texture;
+        }
+        else
+        {
+            resultText.text = "Image Load Failed";
+        }
+    }
+
+    // Event - called when user presses sumbit button in UI
     public void SubmitAnswer()
     {
+        // Event triggered when user sumbits answer
         if(answerInput.text == correctAnswer)
         {
             resultText.text = "correct...health restored";
@@ -117,6 +123,7 @@ public class QuizManager : MonoBehaviour
         SaveScore(score);
     }
 
+    // Save score in Firebase Firestore database 
     async void SaveScore(int newScore)
     {
         FirebaseUser user = auth.CurrentUser;
@@ -131,7 +138,8 @@ public class QuizManager : MonoBehaviour
             {
                 oldScore = snapshot.GetValue<int>("score");
             } 
-
+            
+            // Check and update only if new score is higher
             if(newScore>oldScore)
             {
                  Dictionary<string,object> updates = new Dictionary<string, object>()
